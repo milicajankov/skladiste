@@ -36,8 +36,11 @@ public:
     friend bool operator != (const Proizvod &p1, const Proizvod &p2){
         return !(p1.poredjenje(p2));
     }
-};
+    char getOznaka(){
+        return oznaka;
 
+    }
+};
 class Sanduk: public Proizvod{
     double a, b, c;
 public:
@@ -55,6 +58,7 @@ public:
     int getId(Sanduk &s)const{
         return s.id;
     }
+
 };
 
 class Bure : public Proizvod{
@@ -89,17 +93,46 @@ public:
     int max_broj()const{
         return max_mesta;
     }
+    int prosecna_zap()const{
+        return trenutna_vol()/skup.size();
+    }
+
+    int broj_sanduka()const{
+        auto s=0;
+        for(auto x:skup){
+            if(x->getOznaka()=='S')
+            s++;
+
+        }
+        return s;
+    }
+    int broj_buradi()const{
+        auto s=0;
+        for(auto x: skup){
+            if(x->getOznaka()=='B')
+            s++;
+        }
+        return s;
+    }
+    int min_id()const{
+        auto poc=2;
+        for(auto x: skup){
+            while(x->getId() < poc){
+                poc=x->getId();
+            }
+        }
+        return poc;
+    }
     int max_id()const{
         auto poc=0;
-        auto tmp=0;
         for(auto x: skup){
-            if(poc < x->getId()){
-                tmp+=x->getId();
-                poc=tmp;
+            while(x->getId() > poc){
+                poc=x->getId();
                 }
-            return poc;
             }
+             return poc;
     }
+
     double trenutna_vol()const{
         double res=0.;
         for(auto x: skup)
@@ -118,11 +151,24 @@ public:
         else
         cout<<"greska";
     }
+    /*void najveci(const Proizvod* p){
+    cout << endl << "Najveci: "
+         << **min_element(skup.begin(), skup.end(),
+                          [](Proizvod *a, Proizvod *b) {return a->getId() > b->getId();}
+                          ) << endl;
+    }*/
+    // takodje kao ono kod kolicine, da dodas ako im se poklapa npr. id
+    void dj(const Proizvod *p){
+        int i=0;
+
+    }
+
+
     void izbaci(const Proizvod *p){
         size_t i = 0;
         for(i=0; i<skup.size(); ++i)
             if(*skup[i] == *p)
-                break;
+             //   break;
             skup.erase(skup.begin() + i);
     }
     friend ostream& operator << (ostream &out, const Skladiste &s){
@@ -141,12 +187,17 @@ int main()
     s.dodaj(new Bure (1, 2, 4));
     s.dodaj(new Bure (5, 2 ,4));
     s.izbaci(new Bure (1, 2, 4));
+
     cout << s << endl;
     cout << s.trenutna_vol() << endl;
     cout << s.preostala_vol() << endl;
     cout << s.trenutni_broj() << endl;
     cout << s.max_broj() << endl;
     cout << s.max_id() << endl;
+    cout << s.min_id() << endl;
+    cout << s.prosecna_zap() << endl;
+    cout << s.broj_buradi() << endl;
+    cout << s.broj_sanduka() << endl;
     /*vector<Proizvod*>niz;
     for(auto el : niz)
         cout << *el << endl;
